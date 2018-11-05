@@ -14,7 +14,7 @@ if ! command -v md5sum >/dev/null 2>&1 ; then
 fi
 
 # for POSIX compatibility
-module "printfq" "https://mdl.sh/printfq/printfq-0.9.0.sh"
+module "printfq" "https://mdl.sh/printfq/printfq-0.9.0.sh" "cksum-2815862747"
 
 # Parameter default values
 cacheDir="${cacheDir:-./cache}"
