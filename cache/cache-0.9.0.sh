@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Make is easy to cache the result of a command
 # Example:
 # cache -- curl -sL "https://mdl.sh"
