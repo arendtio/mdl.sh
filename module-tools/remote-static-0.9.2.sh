@@ -1,33 +1,9 @@
 #!/bin/sh
-set -eEuo pipefail
+set -eEu
 
-if [ "$#" != "2" ]; then
-	echo "2 arguments are required"
-	exit 1
-fi
-
-if [ -e "$2" ]; then
-	echo "The result file exists already. Aborting."
-	exit 1
-fi
+identifier="$1"
 
 eval "$(curl -fsL "https://mdl.sh/latest")"
-# start module https://mdl.sh/module/module-compiler-0.9.2.sh
-moduleCompiler() {(
-# start module https://mdl.sh/error/error-1.0.1.sh
-error() {(
-# mandatory:
-# error message
-msg="$1"
-
-# optional:
-# exit code
-code="${2:-1}"
-
-echo "$msg" >&2
-exit "$code"
-)}
-# end module https://mdl.sh/error/error-1.0.1.sh
 # start module https://mdl.sh/module/module-fetch-0.9.2.sh
 moduleFetch() {(
 # start module https://mdl.sh/https-get/https-get-1.0.1.sh
@@ -373,122 +349,51 @@ moduleContent="$2"
 printf '%s() {(\n%s\n)}\n' "$name" "$moduleContent"
 )}
 # end module https://mdl.sh/module/module-scope-0.9.0.sh
-# start module https://mdl.sh/module/module-validate-0.9.1.sh
-moduleValidate() {(
-src="$1"
-targetHash="$2"
+# start module https://mdl.sh/module-tools/identifier-0.9.0.sh
+identifier() {(
+identifier="$1"
 
-# start module https://mdl.sh/module/module-checksum-0.9.0.sh
-moduleChecksum() {(
-# mandatory:
-# content
-content="$1"
-
-# optional:
-# command to calculate the hash, examples:
-# cksum (default, POSIX compliant, weak)
-# md5sum (fast)
-# sha256sum (secure)
-hashCmd="${2:-cksum}"
-
-# start module https://mdl.sh/error/error-1.0.1.sh
-error() {(
-# mandatory:
-# error message
-msg="$1"
-
-# optional:
-# exit code
-code="${2:-1}"
-
-echo "$msg" >&2
-exit "$code"
-)}
-# end module https://mdl.sh/error/error-1.0.1.sh
-
-if ! command -v "$hashCmd" >/dev/null 2>&1; then
-	error "Checksum command '$hashCmd' is not available. Exiting."
+if [ "$(printf '%s' "$identifier" | head -c 5 | tr '[:upper:]' '[:lower:]')" = "https" ]; then
+	## it seems to be an URL
+	location="$identifier"
+elif [ -f "$identifier" ]; then
+	## it seems to be a path
+	location="$identifier"
+else
+	## trying to transform the identifier to an URL
+	if [ "${identifier#*/}" != "$identifier" ]; then
+		# the identifier contains a slash
+		location="https://mdl.sh/$identifier"
+	else
+		# no slash present within the identifier
+		packageName="$(echo "$identifier" | sed -e 's;^\([^/]*\)-[^/-]*$;\1;' -e 's/-static$//' -e 's/-test$//')"
+		location="https://mdl.sh/$packageName/$identifier"
+	fi
+	location="$(echo "$location" | sed 's;\([^:]\)//;\1/;g')"
 fi
 
-printf '%s-' "$hashCmd"
-printf '%s' "$content" | "$hashCmd" | cut -d ' ' -f1
-printf '\n'
+echo "$location"
 )}
-# end module https://mdl.sh/module/module-checksum-0.9.0.sh
+# end module https://mdl.sh/module-tools/identifier-0.9.0.sh
 
-hashFunc="$(echo "$targetHash" | cut -d '-' -f1)"
-srcHash="$(moduleChecksum "$src" "$hashFunc")"
-if [ "$srcHash" != "$targetHash" ]; then
-	return 1
+# transform identifier to location
+location="$(identifier "$identifier")"
+
+# obtain content from $location
+if [ "$(printf '%s' "$location" | head -c 5 | tr '[:upper:]' '[:lower:]')" = "https" ]; then
+	content="$(moduleFetch "$location")"
+else
+	content="$(cat "$location")"
 fi
-)}
-# end module https://mdl.sh/module/module-validate-0.9.1.sh
 
-compile() {
-	srcString="$1"
-	relativeBasePath="$2"
+# wrap module
+src="$(moduleScope "remoteExecution" "$content")"
 
-	# the pipe creates a sub-shell but that it not relevant here
-	printf '%s' "$srcString" | while IFS="" read -r p || [ -n "$p" ]
-	do
-		# if we find a 'module "name" "url"' line
-		moduleSyntaxRegex='^\s*module\(Local\)*\s[^"'\'']*["'\'']\([^"'\'']*\)["'\''] ["'\'']\([^"'\'']*\)["'\'']\s*["'\'']*\([^"'\'']*\)["'\'']*$'
-		if printf '%s\n' "$p" | grep "$moduleSyntaxRegex" >/dev/null; then
-			func="$(printf '%s\n' "$p" | sed "s;$moduleSyntaxRegex;\\2;")"
-			url="$(printf '%s\n' "$p" | sed "s;$moduleSyntaxRegex;\\3;")"
-			checksum="$(printf '%s\n' "$p" | sed "s;$moduleSyntaxRegex;\\4;")"
-			scopeFlag="$(printf '%s\n' "$p" | sed 's;^\s*module\(Local\)*\s\+-s\s\+.*$;true;')"
+# load module
+eval "$src"
 
-			echo "processing $url" >&2
+# remove the script as positional parameter
+shift 1
 
-			#fetch and compile the target file
-			printf '# start module %s\n' "$url"
-			nextRelativeBase="/.." # a reasonable invalid path
-			if [ "$(printf '%s' "$url" | head -c 5 | tr '[:upper:]' '[:lower:]')" = "https" ]; then
-				src="$(moduleFetch "$url")"
-			elif [ "$(printf '%s' "$url" | head -c 1)" = "/" ]; then
-				src="$(cat "$url")"
-				nextRelativeBase="$(dirname "$url")"
-			else
-				src="$(cat "$relativeBasePath/$url")"
-				nextRelativeBase="$(cd -P -- "$(dirname "$relativeBasePath/$url")" && pwd -P)"
-			fi
-
-			# validate checksum of src
-			if [ "$checksum" != "" ]; then
-				if ! moduleValidate "$src" "$checksum"; then
-					error "Source code validation for $url failed. Exiting."
-					exit 1
-				fi
-			fi
-
-			# recursive call of this compiler
-			src="$(compile "$src" "$nextRelativeBase")"
-			# remove shebang and first empty line
-			src="$(printf '%s' "$src" | awk '!f && /^#!\// {f=1;next}1' | awk '{if (NR==1 && NF==0) next};1')"
-
-			# wrap module in a subshell
-			if [ "$scopeFlag" = "true" ]; then
-				printf '%s\n' "$src" # if -s is present
-			else
-				moduleScope "$func" "$src"
-			fi
-			printf '# end module %s\n' "$url"
-
-		# if we find a "fetch modul.sh via curl line", remove it (the compiler should do what modul.sh does)
-		elif printf '%s\n' "$p" | grep "^\\s*eval \"\$(curl -fsL [\"']https://[^\"']*/module/module-[^\"']*.sh[\"'])\"" >/dev/null; then
-			printf ''
-		elif printf '%s\n' "$p" | grep "^\\s*eval \".*/module-local/module-local-[^\"']*.sh.*\"" >/dev/null; then
-			printf ''
-		else
-			printf '%s\n' "$p"
-		fi
-	done
-}
-
-compile "$@"
-)}
-# end module https://mdl.sh/module/module-compiler-0.9.2.sh
-
-moduleCompiler "$(cat "$1")" "$(dirname "$1")" > "$2"
-chmod +x "$2"
+# execute module
+remoteExecution "$@"
