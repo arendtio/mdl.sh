@@ -4,7 +4,7 @@
 url="$1"
 
 # dependencies
-module "colonConfigEvaluated" "https://mdl.sh/colon-config/colon-config-evaluated-0.9.1.sh" "cksum-1579946624"
+module "colonConfigEvaluated" "https://mdl.sh/colon-config/colon-config-evaluated-0.9.2.sh" "cksum-2493197259"
 module "httpsGet" "https://mdl.sh/https-get/https-get-1.0.1.sh" "cksum-744847999"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
 module "tmpDirByUserKeyword" "https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.3.sh" "cksum-1384258922"
