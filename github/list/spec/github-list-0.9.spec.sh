@@ -8,7 +8,7 @@ module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
 module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
 
-DEBUG_NAMESPACE="MYFUNC_SPEC"
+DEBUG_NAMESPACE="GITHUB_LIST_SPEC"
 
 # no arguments
 if githubList >/dev/null 2>&1; then
