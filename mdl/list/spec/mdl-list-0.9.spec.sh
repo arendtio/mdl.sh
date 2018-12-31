@@ -55,3 +55,8 @@ if mdlList "files" "hello-world" >/dev/null 2>&1; then
 	error "TEST: mdlList does not return a non-zero value if the path argument does not start with a slash"
 fi
 
+# list dirs in a directory without subdirs
+result="$(mdlList "dirs" /hello-world/spec)"
+target=""
+assertEqual "List dirs when no subdirs exist" "$result" "$target"
+
