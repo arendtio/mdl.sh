@@ -17,19 +17,24 @@ echo "$msg" >&2
 exit "$code"
 )}
 # end module https://mdl.sh/error/error-1.0.1.sh
-# start module https://mdl.sh/module/module-fetch-0.9.5.sh
+# start module https://mdl.sh/module/module-fetch-0.9.6.sh
 moduleFetch() {(
 # mandatory parameters
 url="$1"
 
 # dependencies
-# start module https://mdl.sh/colon-config/colon-config-evaluated-0.9.2.sh
+# start module https://mdl.sh/colon-config/colon-config-evaluated-0.9.3.sh
 colonConfigEvaluated() {(
 # parameters are defined in colon-config
 
 # dependencies
-# start module https://mdl.sh/colon-config/colon-config-0.9.1.sh
+# start module https://mdl.sh/colon-config/colon-config-0.9.2.sh
 colonConfig() {(
+if [ "$#" -lt 2 ]; then
+	printf 'This function requires at least two arguments.\n' >&2
+	exit 1
+fi
+
 # parameters
 # the first parameter must be the key, the last the default value
 # in between can be an arbitraty number of config files
@@ -95,12 +100,12 @@ done
 defaultValue="$1"
 printf '%s\n' "$defaultValue"
 )}
-# end module https://mdl.sh/colon-config/colon-config-0.9.1.sh
+# end module https://mdl.sh/colon-config/colon-config-0.9.2.sh
 
 value="$(colonConfig "$@")"
 eval "printf '%s ' $value | sed 's/ \$/\\n/g'" # to evaluate variables like: $XDG_DATA_HOME
 )}
-# end module https://mdl.sh/colon-config/colon-config-evaluated-0.9.2.sh
+# end module https://mdl.sh/colon-config/colon-config-evaluated-0.9.3.sh
 # start module https://mdl.sh/https-get/https-get-1.0.1.sh
 httpsGet() {(
 # mandatory:
@@ -229,7 +234,7 @@ fi
 printf '%s\n' "$pointer"
 )}
 # end module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.3.sh
-# start module https://mdl.sh/cache/cache-0.9.4.sh
+# start module https://mdl.sh/cache/cache-0.9.5.sh
 cache() {(
 # Make is easy to cache the result of a command
 # Example:
@@ -280,7 +285,7 @@ action="cache"
 cmd=""
 
 # Parameters
-while : ; do
+while [ "$#" -gt 0 ]; do
 	#echo "processing an argument: $1"
 	if [ "$1" = "-d" ]; then
 		cacheDir="$2"
@@ -295,7 +300,6 @@ while : ; do
 	elif [ "$1" = "-s" ]; then
 		cmd="$2"
 		shift 2
-		break
 	elif [ "$1" = "-t" ]; then
 		timeLimit=$2
 		limitExists="true"
@@ -304,7 +308,7 @@ while : ; do
 		shift 1
 		break
 	elif [ "$(printf '%s' "$1" | cut -c 1)" = "-" ]; then
-		echo "Invalid argument $1"
+		echo "Invalid argument $1" >&2
 		exit 1
 	else
 		echo "Please use the -- argument terminator to avoid ambiguous arguments" >&2
@@ -316,7 +320,7 @@ if [ "$action" = "reset" ]; then
 	if [ -e "$cacheDir" ]; then
 		rm -r "$cacheDir"
 	fi
-	return 0
+	exit 0
 fi
 
 #echo "cache miss"
@@ -347,22 +351,18 @@ if [ -f "$cacheFile" ]; then
 	fi
 fi
 
+if [ "$keyDict" = "true" ] && [ ! -e "$cacheDir/keyDict/$cacheKey" ]; then
+	echo "$cmd" > "$cacheDir/keyDict/$cacheKey"
+fi
+
 if [ "$hit" = "false" ]; then
 	#echo -n "executing: $cmd" >&2
-	output="$(eval "$cmd")" && rc="$?" || rc="$?"
+	eval "$cmd" > "$cacheFile"
+	rc="$?"
 	#echo "return Value: $rc"
-	if [ "$rc" = "0" ]; then
-		if [ "$keyDict" = "true" ]; then
-			echo "$cmd" > "$cacheDir/keyDict/$cacheKey"
-		fi
-
-		if [ "$(printf '%s' "$output" | wc -c)" = "0" ]; then
-			printf '' > "$cacheFile"
-		else
-			printf '%s' "$output" > "$cacheFile"
-		fi
-	else
-		return $rc
+	if [ "$rc" != "0" ]; then
+		rm "$cacheFile"
+		exit $rc
 	fi
 #else
 #	echo "cache hit"
@@ -370,8 +370,8 @@ fi
 
 cat "$cacheFile"
 )}
-# end module https://mdl.sh/cache/cache-0.9.4.sh
-# start module https://mdl.sh/debug/debug-0.9.0.sh
+# end module https://mdl.sh/cache/cache-0.9.5.sh
+# start module https://mdl.sh/debug/debug-0.9.1.sh
 debug() {(
 # Examples
 # Printing the debug message every time the function is called:
@@ -391,12 +391,16 @@ section="${2:-ALL}"
 level="${3:-1}"
 
 envDebugLevel="$(printf '%s' "${DEBUG_ALL:-0}")"
-envDebugSectionLevel="$(eval "printf '%s\\n' \"\${DEBUG_$section:-0}\"")"
-if [ "$envDebugLevel" -ge "$level" ] || [ "$envDebugSectionLevel" -ge "$level" ]; then
-	echo "$section: $msg" >&2
+envDebugSectionLevel="$(eval "printf '%s\\n' \"\${DEBUG_$section:-$envDebugLevel}\"")"
+if [ "$envDebugSectionLevel" -ge "$level" ]; then
+	printf '%s: %s\n' "$section" "$msg" >&2
 fi
+
+# TODO: for 1.0, consider
+#	- switching positions of level and section
+#	- using DEBUG_NAMESPACE
 )}
-# end module https://mdl.sh/debug/debug-0.9.0.sh
+# end module https://mdl.sh/debug/debug-0.9.1.sh
 
 debug "Getting module from URL '$url'" "MODULE_FETCH" 1
 
@@ -466,7 +470,7 @@ fi
 # write the source code to stdout
 printf '%s' "$src"
 )}
-# end module https://mdl.sh/module/module-fetch-0.9.5.sh
+# end module https://mdl.sh/module/module-fetch-0.9.6.sh
 # start module https://mdl.sh/module/module-scope-0.9.0.sh
 moduleScope() {(
 name="$1"
