@@ -6,7 +6,7 @@ directory="$2"
 module "semverCompare" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 DEBUG_NAMESPACE="SEMVER_COMPARE_SPEC"
 
@@ -88,4 +88,3 @@ compareTest 1.0.0 isLess 1.0.0 1
 compareTest 1.0 isLess 1.0.0 1
 compareTest 1.0.0 isGreater 1.0.0 1
 compareTest 1.0 isGreater 1.0.0 1
-

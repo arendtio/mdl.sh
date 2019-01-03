@@ -5,7 +5,7 @@ directory="$2"
 
 module "debug" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.0.sh" "cksum-811392305"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 # ouput to stderr
 result="$(DEBUG_ALL=1 debug "One" 2>&1 1>/dev/null)"
@@ -78,4 +78,3 @@ assertEqual "ALL=undefined, SPECIFIC=2" "$result" "$target"
 target="FETCH: One"
 result="$(DEBUG_ALL=5 debug "One" "FETCH" "5" 2>&1 1>/dev/null)"
 assertEqual "Bug: DEBUG_ALL=5 for DEBUG_FETCH=5" "$result" "$target"
-

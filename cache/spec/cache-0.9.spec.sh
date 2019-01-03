@@ -8,8 +8,8 @@ baseDirectory="$2"
 
 module "cache" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "debug" "https://mdl.sh/debug/debug-0.9.0.sh" "cksum-4035594112"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.0.sh" "cksum-811392305"
+module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 keyword="test-cache"
 cacheDirectory="$baseDirectory/cacheTest"
@@ -178,4 +178,3 @@ fi
 #   For version 1.0 we might consider changing it to removing just the content
 #   of the directory.
 # - no cacheDir (should respond with error, breaking change, simply creating the dir is bad practice (you never know what you might overwrite))
-

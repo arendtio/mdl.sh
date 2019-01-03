@@ -5,7 +5,7 @@ directory="$2"
 
 module "colonConfig" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 # This can be used to debug print all asserts with
 # DEBUG_COLON_CONFIG_SPEC=2 ./run-all.sh
@@ -42,4 +42,3 @@ assertEqual "Spaced content in variable" "$result" "$target"
 result="$(colonConfig "Five" "$directory/first.conf" "default")"
 target="$HOME"
 assertEqual "Tilde expansion" "$result" "$target"
-

@@ -7,8 +7,8 @@ file="$directory/test.conf"
 
 module "colonValue" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "debug" "https://mdl.sh/debug/debug-0.9.0.sh" "cksum-4035594112"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.0.sh" "cksum-811392305"
+module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 # file does not exist
 if colonValue "Zero" "$file" >/dev/null; then
@@ -47,4 +47,3 @@ assertEqual "Value with trailing space" "$result" "$target"
 result="$(colonValue "Six" "$file")"
 target="F:F"
 assertEqual "Value with colon" "$result" "$target"
-

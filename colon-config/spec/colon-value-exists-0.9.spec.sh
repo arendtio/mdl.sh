@@ -7,7 +7,7 @@ file="$directory/test.conf"
 
 module "colonValueExists" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.0.sh" "cksum-811392305"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 # file does not exist
 if colonValueExists "Zero" "$file" >/dev/null; then
@@ -27,5 +27,3 @@ assertEqual "Key exists (output)" "$result" "$target"
 if colonValueExists "Two" "$file" >/dev/null; then
 	error "TEST: colonValueExists does not return an non-zero value if the key does not exist" 1
 fi
-
-
