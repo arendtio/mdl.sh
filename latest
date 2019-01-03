@@ -17,7 +17,7 @@ echo "$msg" >&2
 exit "$code"
 )}
 # end module https://mdl.sh/error/error-1.0.1.sh
-# start module https://mdl.sh/module/module-fetch-0.9.6.sh
+# start module https://mdl.sh/module/module-fetch-0.9.8.sh
 moduleFetch() {(
 # mandatory parameters
 url="$1"
@@ -160,7 +160,7 @@ echo "$msg" >&2
 exit "$code"
 )}
 # end module https://mdl.sh/error/error-1.0.1.sh
-# start module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.3.sh
+# start module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.4.sh
 tmpDirByUserKeyword() {(
 # This module provides an easy way to create a tmp directory
 # which can be found by other programs which use the same keyword.
@@ -184,7 +184,8 @@ if ! command -v mktemp >/dev/null 2>&1; then
 fi
 
 # macOS gets some special treatment
-if [ "$(printf '%s' "$OSTYPE" | cut -c 1-6)" = "darwin" ]; then
+# $OSTYPE is not part of POSIX
+if [ "$(printf '%s' "${OSTYPE:-}" | cut -c 1-6)" = "darwin" ]; then
 	cmdDry="$(printf "mktemp -t '%s' -u" "$keyword")"
 	cmdDir="$(printf "mktemp -d -t '%s'" "$keyword")"
 	cmdFile="$(printf "mktemp -t '%s-pointer'" "$keyword")"
@@ -233,7 +234,7 @@ fi
 
 printf '%s\n' "$pointer"
 )}
-# end module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.3.sh
+# end module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.4.sh
 # start module https://mdl.sh/cache/cache-0.9.5.sh
 cache() {(
 # Make is easy to cache the result of a command
@@ -436,7 +437,7 @@ fi
 
 # obtain the source code
 # use the cache only if md5sum is available
-if [ "$executed" == "false" ] && ( command -v md5sum >/dev/null 2>&1 || command -v md5 >/dev/null 2>&1 ); then
+if [ "$executed" = "false" ] && ( command -v md5sum >/dev/null 2>&1 || command -v md5 >/dev/null 2>&1 ); then
 	# create/find the cache directory
 	if cachePointer="$(tmpDirByUserKeyword "module-cache" 2>/dev/null)"; then
 		debug "Using cache directory '$cachePointer'" "MODULE_FETCH" 1
@@ -449,7 +450,7 @@ if [ "$executed" == "false" ] && ( command -v md5sum >/dev/null 2>&1 || command 
 fi
 
 # if the command was not executed with the cache, we just skip the cache
-if [ "$executed" == "false" ]; then
+if [ "$executed" = "false" ]; then
 	debug "Getting module without cache" "MODULE_FETCH" 1
 	src="$(httpsGet "$url")"
 fi
@@ -470,7 +471,7 @@ fi
 # write the source code to stdout
 printf '%s' "$src"
 )}
-# end module https://mdl.sh/module/module-fetch-0.9.6.sh
+# end module https://mdl.sh/module/module-fetch-0.9.8.sh
 # start module https://mdl.sh/module/module-scope-0.9.0.sh
 moduleScope() {(
 name="$1"
