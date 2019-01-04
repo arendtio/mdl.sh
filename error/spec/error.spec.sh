@@ -5,7 +5,7 @@ directory="$2"
 
 module "errImpl" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 # file does not exist
 if errImpl "No real Error" >/dev/null 2>&1; then
@@ -26,5 +26,3 @@ assertEqual "No output to stdout" "$result" "$target"
 errImpl "No real Error" 42 >/dev/null 2>&1 || result="$?" && true
 target="42"
 assertEqual "Custom return code" "$result" "$target"
-
-

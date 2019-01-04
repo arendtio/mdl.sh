@@ -6,8 +6,8 @@ directory="$2"
 module "compiler" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.5.sh" "cksum-1233830148"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
+module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.8.sh" "cksum-2717341825"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 DEBUG_NAMESPACE="COMPILER_SPEC"
 
@@ -57,4 +57,3 @@ debug "Ckeck if the result of the first compilation is equal to the second one" 
 result="$(cat "$secondCompiler" | cksum)"
 target="$(cat "$staticCompiler" | cksum)"
 assertEqual "Compiled compiler compiles" "$result" "$target"
-

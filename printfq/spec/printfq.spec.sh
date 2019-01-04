@@ -3,7 +3,7 @@
 implementation="$1"
 
 module "printfq" "$implementation"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.1.sh" "cksum-2022066480"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 testString1="echo 'asd (asd)'; echo \"\$asd\"\\na=\"a\"\\nb=\"b\" # different\\nif [ \"\$a\" != \"\$b\" ]; then\\n\tprintf '%s %s\\n' \"\$a\" \"\$b\" > /dev/null\\nfi\\n"
 result="$(printfq "$testString1")"
