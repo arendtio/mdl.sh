@@ -4,10 +4,10 @@ implementation="$1"
 directory="$2"
 
 module "compiler" "$implementation"
-module "error" "https://mdl.sh/error/error-1.0.2.sh" "cksum-2718151387"
-module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.13.sh" "cksum-2190068958"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.3.sh" "cksum-3344728351"
+module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
+module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.14.sh" "cksum-626475234"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.4.sh" "cksum-566303087"
 
 DEBUG_NAMESPACE="COMPILER_SPEC"
 

@@ -4,8 +4,8 @@ implementation="$1"
 directory="$2"
 
 module "colonConfig" "$implementation"
-module "error" "https://mdl.sh/error/error-1.0.2.sh" "cksum-2718151387"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.3.sh" "cksum-3344728351"
+module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.4.sh" "cksum-566303087"
 
 # This can be used to debug print all asserts with
 # DEBUG_COLON_CONFIG_SPEC=2 ./run-all.sh

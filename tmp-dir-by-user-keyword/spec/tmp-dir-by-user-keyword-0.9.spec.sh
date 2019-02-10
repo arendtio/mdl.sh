@@ -4,9 +4,9 @@ implementation="$1"
 directory="$2"
 
 module "tmpDirByUserKeyword" "$implementation"
-module "error" "https://mdl.sh/error/error-1.0.2.sh" "cksum-2718151387"
-module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.3.sh" "cksum-3344728351"
+module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
+module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.4.sh" "cksum-566303087"
 
 DEBUG_NAMESPACE="TMPDIR_SPEC"
 
