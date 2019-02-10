@@ -6,9 +6,9 @@ directory="$2"
 file="$directory/test.conf"
 
 module "colonValue" "$implementation"
-module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
+module "error" "https://mdl.sh/error/error-1.0.2.sh" "cksum-2718151387"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.3.sh" "cksum-3344728351"
 
 # file does not exist
 if colonValue "Zero" "$file" >/dev/null; then

@@ -4,9 +4,9 @@ implementation="$1"
 # directory="$2"
 
 module "findVersion" "$implementation"
-module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
+module "error" "https://mdl.sh/error/error-1.0.2.sh" "cksum-2718151387"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
+module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.3.sh" "cksum-3344728351"
 
 DEBUG_NAMESPACE="FIND_VERSION_SPEC"
 export DEBUG_NAMESPACE
@@ -129,4 +129,3 @@ assertEqual "latestSameMajor hello-world" "$result" "$target"
 result="$(findVersion "latestSameMajor" "/error/error-1.0.0.sh")"
 target="/error/error-1.0.2.sh"
 assertEqual "latestSameMajor error-1.0.0" "$result" "$target"
-
