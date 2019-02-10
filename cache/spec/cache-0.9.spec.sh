@@ -37,16 +37,16 @@ unstableFunc() {
 #
 # Test directory option (-d)
 #
-beforeCmdCount="$(ls -A "$cacheDirectory" | wc -l)"
+beforeCmdCount="$(ls -A "$cacheDirectory" | wc -l | sed 's/^[[:space:]]*//g')"
 cache -d "$cacheDirectory" -- printf 'explicit option' >/dev/null
-assertEqual "Explicit directory option" "$(ls -A "$cacheDirectory" | wc -l)" "$((beforeCmdCount + 1))"
+assertEqual "Explicit directory option" "$(ls -A "$cacheDirectory" | wc -l | sed 's/^[[:space:]]*//g')" "$((beforeCmdCount + 1))"
 
 # use the env variable for the following tests
 cacheDir="$cacheDirectory"
 export cacheDir
-beforeCmdCount="$(ls -A "$cacheDir" | wc -l)"
+beforeCmdCount="$(ls -A "$cacheDir" | wc -l | sed 's/^[[:space:]]*//g')"
 cache -- printf 'env cacheDir' >/dev/null
-assertEqual "CacheDir from env" "$(ls -A "$cacheDir" | wc -l)" "$((beforeCmdCount + 1))"
+assertEqual "CacheDir from env" "$(ls -A "$cacheDir" | wc -l | sed 's/^[[:space:]]*//g')" "$((beforeCmdCount + 1))"
 
 
 #

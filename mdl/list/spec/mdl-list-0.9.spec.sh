@@ -26,7 +26,7 @@ if mdlList "invalid" >/dev/null 2>&1; then
 fi
 
 # action all
-result="$(mdlList "all" / | grep '^/\(CNAME\|hello-world\)$' | wc -l)"
+result="$(mdlList "all" / | grep '^/\(CNAME\|hello-world\)$' | wc -l | sed 's/^[[:space:]]*//g')"
 target="2"
 assertEqual "Action all" "$result" "$target"
 
