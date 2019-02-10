@@ -127,5 +127,5 @@ assertEqual "latestSameMajor hello-world" "$result" "$target"
 
 ## error-1.0.0
 result="$(findVersion "latestSameMajor" "/error/error-1.0.0.sh")"
-target="/error/error-1.0.2.sh"
+target="/error/error-1.0.3.sh"
 assertEqual "latestSameMajor error-1.0.0" "$result" "$target"
