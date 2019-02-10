@@ -13,7 +13,7 @@ module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-166
 DEBUG_NAMESPACE="COLON_CONFIG_SPEC"
 
 # create config files
-printf 'One: A\nTwo: $X\nThree: $X/and $Y/\nFour: $Z\nFive: ~\n' >$directory/first.conf
+printf 'One: A\nTwo: $X\nThree: $X/and $Y/\nFour: $Z\nFive: ~\nSix: ~/repo\n' >$directory/first.conf
 X="myX"
 Y="myY"
 Z="my little space train"
@@ -42,3 +42,8 @@ assertEqual "Spaced content in variable" "$result" "$target"
 result="$(colonConfig "Five" "$directory/first.conf" "default")"
 target="$HOME"
 assertEqual "Tilde expansion" "$result" "$target"
+
+# tilde plus
+result="$(colonConfig "Six" "$directory/first.conf" "default")"
+target="$HOME/repo"
+assertEqual "Tilde expansion plus" "$result" "$target"
