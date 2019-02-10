@@ -18,7 +18,7 @@ fi
 
 # dependencies
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "mdlList" "https://mdl.sh/mdl/list/mdl-list-0.9.5.sh" "cksum-3840375925"
+module "mdlList" "https://mdl.sh/mdl/list/mdl-list-0.9.6.sh" "cksum-2796039797"
 module "semverCompare" "https://mdl.sh/semver-compare/semver-compare-0.9.0.sh" "cksum-3471705375"
 
 findSpecPairs() { (

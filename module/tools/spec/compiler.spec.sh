@@ -6,7 +6,7 @@ directory="$2"
 module "compiler" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.1.sh" "cksum-1107954660"
 module "debug" "https://mdl.sh/debug/debug-0.9.1.sh" "cksum-2534568300"
-module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.8.sh" "cksum-2717341825"
+module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.9.sh" "cksum-329176421"
 module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.2.sh" "cksum-1669532880"
 
 DEBUG_NAMESPACE="COMPILER_SPEC"
