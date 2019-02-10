@@ -122,11 +122,11 @@ assertEqual "majorFromVersion 100" "$result" "$target"
 # latestSameMajor
 ## hello world
 result="$(findVersion "latestSameMajor" "/hello-world/hello-world-1.2.3.sh")"
-target="/hello-world/hello-world-1.0.0.sh"
+target="/hello-world/hello-world-1.0.1.sh"
 assertEqual "latestSameMajor hello-world" "$result" "$target"
 
 ## error-1.0.0
 result="$(findVersion "latestSameMajor" "/error/error-1.0.0.sh")"
-target="/error/error-1.0.1.sh"
+target="/error/error-1.0.2.sh"
 assertEqual "latestSameMajor error-1.0.0" "$result" "$target"
 
