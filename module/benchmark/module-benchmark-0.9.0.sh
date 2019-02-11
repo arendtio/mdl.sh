@@ -1,0 +1,50 @@
+#!/bin/sh
+# usage example: module-benchmark-0.9.0.sh https://mdl.sh/debug/debug-0.9.1.sh https://mdl.sh/debug/debug-0.9.2.sh "debug message"
+
+# mandatory parameters
+modA="$1" # 1
+shift 1
+modB="$1" # 2
+shift 1
+
+# dependencies
+module "timestamp" "https://mdl.sh/posix/timestamp/timestamp-0.9.0.sh" "cksum-111879899"
+module "funcA" "$modA"
+module "funcB" "$modB"
+
+# find out how many rounds a function can do within ~3 seconds (+ 1 round)
+timeout="3"
+calibrate(){
+	count="0"
+	startTime="$(timestamp)"
+	# run the module for about $timeout seconds (more or less)
+	while [ "$(( $(timestamp) - startTime ))" -lt $timeout ]; do
+		count="$(( count + 1 ))"
+		( "$@" >/dev/null 2>&1 ) || true
+	done
+	printf '%s' "$count"
+}
+
+runBenchmark() {
+	for i in $(seq 1 $limit); do
+		( "$@" >/dev/null 2>&1 ) || true
+	done
+}
+
+measure() {
+	printf '%s completed %s rounds in: ' "$1" "$limit"
+	shift 1
+	{
+		time "$@";
+	} 2>&1 | awk '/^real/{print $2}'
+}
+
+printf 'Calibrating... '
+aLimit="$(calibrate funcA "$@")"
+bLimit="$(calibrate funcB "$@")"
+limit="$(( (aLimit + bLimit) / 2 + 1 ))"
+printf 'done\n\n'
+
+printf 'Starting benchmark with %s rounds:\n' "$limit"
+measure "$modA" runBenchmark funcA "$@"
+measure "$modB" runBenchmark funcB "$@"
