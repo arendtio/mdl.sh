@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [ "$#" -ne 1 ]; then
+	printf 'Expected one argument, but found %s.' "$#"
+	exit 1
+fi
+
 identifier="$1"
 
 if [ "$(printf '%s' "$identifier" | head -c 5 | tr '[:upper:]' '[:lower:]')" = "https" ]; then
@@ -15,10 +20,10 @@ else
 		location="https://mdl.sh/$identifier"
 	else
 		# no slash present within the identifier
-		packageName="$(echo "$identifier" | sed -e 's;^\([^/]*\)-[^/-]*$;\1;' -e 's/-static$//' -e 's/-test$//')"
+		packageName="$(printf '%s' "$identifier" | sed -e 's;^\([^/]*\)-[^/-]*$;\1;' -e 's/-static$//' -e 's/-test$//')"
 		location="https://mdl.sh/$packageName/$identifier"
 	fi
-	location="$(echo "$location" | sed 's;\([^:]\)//;\1/;g')"
+	location="$(printf '%s' "$location" | sed 's;\([^:]\)//;\1/;g')"
 fi
 
-echo "$location"
+printf '%s\n' "$location"
