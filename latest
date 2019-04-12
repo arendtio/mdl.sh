@@ -1,11 +1,22 @@
 #!/bin/sh
 
+# TODO: add an exit statement which the compiler removes to ensure this script
+# is only being used in the static version
+
+# define a function called 'module' which does exactly what module-core does
+# start module https://mdl.sh/module/core/module-core-0.9.13.sh
 module() {
-	# eval module code
-	eval "$(
+# guarantees: intentional-side-effects
+
+# we need to eval the module code here to make sure the function is
+# defined in the current scope
+eval "$(
+	# generate src
+	src="$(
+		set -eu
+
 # start module https://mdl.sh/error/error-1.0.3.sh
-error() { (
-set -eu
+error() {
 # guarantees: intentional-side-effects
 
 # mandatory:
@@ -18,7 +29,7 @@ set -eu
 
 printf '%s\n' "$1" >&2
 exit "${2:-1}"
-) }
+}
 # end module https://mdl.sh/error/error-1.0.3.sh
 # start module https://mdl.sh/module/module-fetch-0.9.14.sh
 moduleFetch() { (
@@ -122,8 +133,7 @@ set -eu
 url="$1"
 
 # start module https://mdl.sh/error/error-1.0.3.sh
-error() { (
-set -eu
+error() {
 # guarantees: intentional-side-effects
 
 # mandatory:
@@ -136,7 +146,7 @@ set -eu
 
 printf '%s\n' "$1" >&2
 exit "${2:-1}"
-) }
+}
 # end module https://mdl.sh/error/error-1.0.3.sh
 
 # find out command- v http client is available and use it
@@ -160,8 +170,7 @@ fi
 ) }
 # end module https://mdl.sh/https-get/https-get-1.0.5.sh
 # start module https://mdl.sh/error/error-1.0.3.sh
-error() { (
-set -eu
+error() {
 # guarantees: intentional-side-effects
 
 # mandatory:
@@ -174,7 +183,7 @@ set -eu
 
 printf '%s\n' "$1" >&2
 exit "${2:-1}"
-) }
+}
 # end module https://mdl.sh/error/error-1.0.3.sh
 # start module https://mdl.sh/tmp-dir-by-user-keyword/tmp-dir-by-user-keyword-0.9.4.sh
 tmpDirByUserKeyword() { (
@@ -392,8 +401,7 @@ cat "$cacheFile"
 ) }
 # end module https://mdl.sh/cache/cache-0.9.6.sh
 # start module https://mdl.sh/debug/debug-0.9.2.sh
-debug() { (
-set -eu
+debug() {
 # guarantees: intentional-side-effects
 
 # Examples
@@ -426,7 +434,7 @@ fi
 # TODO: for 1.0, consider
 #	- switching positions of level and section
 #	- using DEBUG_NAMESPACE
-) }
+}
 # end module https://mdl.sh/debug/debug-0.9.2.sh
 
 debug "Getting module from URL '$url'" "MODULE_FETCH" 1
@@ -498,7 +506,7 @@ fi
 printf '%s' "$src"
 ) }
 # end module https://mdl.sh/module/module-fetch-0.9.14.sh
-# start module https://mdl.sh/module/module-scope-0.9.2.sh
+# start module https://mdl.sh/module/scope/module-scope-0.9.3.sh
 moduleScope() { (
 set -eu
 name="$1"
@@ -515,7 +523,7 @@ else
 	printf '%s() { (\nset -eu\n%s\n) }\n' "$name" "$moduleContent"
 fi
 ) }
-# end module https://mdl.sh/module/module-scope-0.9.2.sh
+# end module https://mdl.sh/module/scope/module-scope-0.9.3.sh
 # start module https://mdl.sh/module/module-validate-0.9.4.sh
 moduleValidate() { (
 set -eu
@@ -537,8 +545,7 @@ content="$1"
 hashCmd="${2:-cksum}"
 
 # start module https://mdl.sh/error/error-1.0.3.sh
-error() { (
-set -eu
+error() {
 # guarantees: intentional-side-effects
 
 # mandatory:
@@ -551,7 +558,7 @@ set -eu
 
 printf '%s\n' "$1" >&2
 exit "${2:-1}"
-) }
+}
 # end module https://mdl.sh/error/error-1.0.3.sh
 
 if ! command -v "$hashCmd" >/dev/null 2>&1; then
@@ -572,37 +579,49 @@ fi
 ) }
 # end module https://mdl.sh/module/module-validate-0.9.4.sh
 
-		subShell="true"
-
-		# detect -s and shift
-		while getopts "s:" opt; do
-			if [ "$opt" = "s" ]; then
-				subShell="false"
-				shift
-			else
-				error "invalid flag: $opt"
-			fi
-		done
-
 		# set other parameters
 		name="$1"
 		location="$2"
 		# optional, but recommended:
 		checksum="${3:-}"
 
-		# obtain module source
+		# check for POSIX compliant function name
+		# https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_235
+		if ! expr "$name" : '^[A-Z_a-z][0-9A-Z_a-z]*$' >/dev/null 2>&1; then
+			error "The function name '$name' is invalid. Exiting." 65
+		fi
+
+		# obtain module source from https or a local repository
 		src="$(moduleFetch "$location")"
+		rc="$?"
+		if [ "$rc" != "0" ]; then
+			error "The module content '$location' could not be loaded. Exiting." 69
+		fi
 
 		# validate source
 		if [ "$#" -ge 3 ] && ! moduleValidate "$src" "$checksum"; then
-			error "Validation of module $name has failed. Exiting."
+			error "Validation of module '$location' has failed. Exiting." 65
 		fi
 
-		# add module prison (sub-shell)
-		if [ "$subShell" = "true" ]; then
-			src="$(moduleScope "$name" "$src")"
-		fi
-
+		# add a separat scope (sub-shell) for every module
+		# moduleScope detects if the module uses the
+		# 'intentional-side-effects' directive to skip it
+		src="$(moduleScope "$name" "$src")"
 		printf '%s' "$src"
 	)"
+	rc="$?"
+
+	# check if generating the src succeeded
+	if [ "$rc" = "0" ]; then
+		# if everything is fine the src will be passed to eval
+		printf '%s' "$src"
+	else
+		# If generating the src failed the return code will be passed throught
+		# eval as the return value of eval is the return value of the evaluated
+		# expression. So we wrap an exti command into a subshell to return a
+		# custom return code without exiting the script.
+		printf '( exit %s )' "$rc"
+	fi
+)"
 }
+# end module https://mdl.sh/module/core/module-core-0.9.13.sh
