@@ -55,6 +55,6 @@ debug "Use the resulting static version of the compiler to compile the the fetch
 "$staticCompiler" "$codeFile" "$secondCompiler" >/dev/null 2>&1
 
 debug "Ckeck if the result of the first compilation is equal to the second one" COMPILER_SPEC 1
-result="$(cksum "$secondCompiler")"
-target="$(cksum "$staticCompiler")"
+result="$(cksum <"$secondCompiler")"
+target="$(cksum <"$staticCompiler")"
 assertEqual "Compiled compiler compiles" "$result" "$target"
