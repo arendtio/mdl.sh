@@ -3,7 +3,7 @@
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
 module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.14.sh" "cksum-626475234"
 module "moduleScope" "https://mdl.sh/module/scope/module-scope-0.9.3.sh" "cksum-424520902"
-module "moduleValidate" "https://mdl.sh/module/module-validate-0.9.4.sh" "cksum-889284891"
+module "moduleValidate" "https://mdl.sh/module/validate/module-validate-0.9.5.sh" "cksum-550402517"
 
 compile() {
 	srcString="$1"

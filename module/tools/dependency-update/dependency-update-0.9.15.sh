@@ -24,7 +24,7 @@ fi
 
 eval "$(curl -fsL "https://mdl.sh/latest")"
 module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
-module "moduleChecksum" "https://mdl.sh/module/module-checksum-0.9.2.sh" "cksum-1965395284"
+module "moduleChecksum" "https://mdl.sh/module/checksum/module-checksum-0.9.3.sh" "cksum-1965395284"
 module "findVersion" "https://mdl.sh/mdl/find-version/find-version-0.9.6.sh" "cksum-349234412"
 
 # search the targetDirectory for modules and make a list (do not include static files)

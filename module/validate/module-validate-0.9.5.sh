@@ -3,7 +3,7 @@
 src="$1"
 targetHash="$2"
 
-module "moduleChecksum" "https://mdl.sh/module/module-checksum-0.9.0.sh" "cksum-24661179"
+module "moduleChecksum" "https://mdl.sh/module/checksum/module-checksum-0.9.3.sh" "cksum-1965395284"
 
 hashFunc="$(printf '%s' "$targetHash" | cut -d '-' -f1)"
 srcHash="$(moduleChecksum "$src" "$hashFunc")"

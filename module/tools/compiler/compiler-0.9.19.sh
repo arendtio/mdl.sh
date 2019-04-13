@@ -17,7 +17,7 @@ if [ -e "$2" ]; then
 fi
 
 eval "$(curl -fsL "https://mdl.sh/latest")"
-module "moduleCompiler" "https://mdl.sh/module/compiler/module-compiler-0.9.17.sh" "cksum-2920623436"
+module "moduleCompiler" "https://mdl.sh/module/compiler/module-compiler-0.9.18.sh" "cksum-1487539890"
 
 moduleCompiler "$(cat "$1")" "$(dirname "$1")" > "$2"
 chmod +x "$2"
