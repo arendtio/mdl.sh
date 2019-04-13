@@ -38,9 +38,9 @@ assertEqual "One arguments, but not 'init'" "$result" "$target"
 # Normal Tests
 #
 
-# check if the output matches the output of the "latest" module
+# check if the output matches the output of the "online" module
 lines="500"
-coreUrl="$(printf '%s' "$implementation" | sed 's;mdl.sh/module/bin/;mdl.sh/module/latest/;')"
+coreUrl="$(printf '%s' "$implementation" | sed 's;mdl.sh/module/bin/;mdl.sh/module/online/;')"
 debug "Core URL '$coreUrl'" "$DEBUG_NAMESPACE" 1
 coreCode="$(moduleFetch "$coreUrl")"
 coreCksum="$(printf '%s\n' "$coreCode" | tail -n "$lines" | cksum)"
