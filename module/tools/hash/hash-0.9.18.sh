@@ -8,7 +8,7 @@ identifier="$1"
 hashFunc="${2:-cksum}"
 
 eval "$(curl -fsL "https://mdl.sh/latest")"
-module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.14.sh" "cksum-626475234"
+module "moduleFetch" "https://mdl.sh/module/fetch/module-fetch-0.9.15.sh" "cksum-626475234"
 module "identifier" "https://mdl.sh/module/identifier/identifier-0.9.2.sh" "cksum-2107256927"
 module "moduleChecksum" "https://mdl.sh/module/checksum/module-checksum-0.9.3.sh" "cksum-1965395284"
 

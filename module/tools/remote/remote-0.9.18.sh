@@ -4,7 +4,7 @@ set -eu
 identifier="$1"
 
 eval "$(curl -fsL "https://mdl.sh/latest")"
-module "moduleFetch" "https://mdl.sh/module/module-fetch-0.9.14.sh" "cksum-626475234"
+module "moduleFetch" "https://mdl.sh/module/fetch/module-fetch-0.9.15.sh" "cksum-626475234"
 module "moduleScope" "https://mdl.sh/module/scope/module-scope-0.9.3.sh" "cksum-424520902"
 module "identifier" "https://mdl.sh/module/identifier/identifier-0.9.2.sh" "cksum-2107256927"
 
