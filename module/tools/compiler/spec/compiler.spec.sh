@@ -34,7 +34,7 @@ fi
 
 # compile empty file
 rm "$directory/two.txt"
-compiler "$directory/one.txt" "$directory/two.txt" >/dev/null 2>&1
+compiler "$directory/one.txt" "$directory/two.txt" >/dev/null
 result="$(cat "$directory/two.txt")"
 target=""
 assertEqual "Compile empty file" "$result" "$target"
