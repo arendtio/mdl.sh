@@ -4,7 +4,7 @@ implementation="$1"
 directory="$2"
 
 module "moduleScope" "$implementation"
-module "assertEqual" "https://mdl.sh/spec-test/assert-equal-0.9.4.sh" "cksum-566303087"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
 
 DEBUG_NAMESPACE="MODULE_SCOPE_SPEC"
 
