@@ -4,7 +4,7 @@
 # is only being used in the static version
 
 # define a function called 'module' which does exactly what module-core does
-# start module https://mdl.sh/module/core/module-core-0.9.13.sh
+# start module https://mdl.sh/module/core/module-core-0.9.17.sh
 module() {
 # guarantees: intentional-side-effects
 
@@ -31,7 +31,7 @@ printf '%s\n' "$1" >&2
 exit "${2:-1}"
 }
 # end module https://mdl.sh/error/error-1.0.3.sh
-# start module https://mdl.sh/module/module-fetch-0.9.14.sh
+# start module https://mdl.sh/module/fetch/module-fetch-0.9.16.sh
 moduleFetch() { (
 set -eu
 # mandatory parameters
@@ -400,44 +400,21 @@ fi
 cat "$cacheFile"
 ) }
 # end module https://mdl.sh/cache/cache-0.9.6.sh
-# start module https://mdl.sh/debug/debug-0.9.2.sh
+# start module https://mdl.sh/debug/debug-1.0.0.sh
 debug() {
 # guarantees: intentional-side-effects
+# To understand this code please take a look at the README.md
 
-# Examples
-# Printing the debug message every time the function is called:
-# debug "Executing this section" 0
-#
-# Print the debug message only when at least one of DEBUG_ALL or DEBUG_MYSEC is set to a number larger or equal to 2
-# debug "Executing this section" "MYSEC" 2
-
-## mandatory:
-## error message
-#msg="$1"
-#
-## optional:
-## debug section
-#section="${2:-ALL}"
-## debug level when the message should be displayed
-#level="${3:-1}"
-#
-#envDebugLevel="$(printf '%s' "${DEBUG_ALL:-0}")"
-#envDebugSectionLevel="$(eval "printf '%s\\n' \"\${DEBUG_$section:-$envDebugLevel}\"")"
-#if [ "$envDebugSectionLevel" -ge "$level" ]; then
-#	printf '%s: %s\n' "$section" "$msg" >&2
-#fi
-
-if [ "$(eval "printf '%s\\n' \"\${DEBUG_${2:-ALL}:-$(printf '%s' "${DEBUG_ALL:-0}")}\"")" -ge "${3:-1}" ]; then
-	printf '%s: %s\n' "${2:-ALL}" "$1" >&2
+if [ "$#" -gt 0 ] &&  [ "$(eval "printf '%s\\n' \"\${DEBUG_${3:-${DEBUG_NAMESPACE:-ALL}}:-$(printf '%s' "${DEBUG_ALL:-0}")}\"")" -ge "${2:-1}" ]; then
+	printf '%s: %s\n' "${3:-${DEBUG_NAMESPACE:-ALL}}" "$1" >&2
 fi
-
-# TODO: for 1.0, consider
-#	- switching positions of level and section
-#	- using DEBUG_NAMESPACE
 }
-# end module https://mdl.sh/debug/debug-0.9.2.sh
+# end module https://mdl.sh/debug/debug-1.0.0.sh
 
-debug "Getting module from URL '$url'" "MODULE_FETCH" 1
+# The debug module uses this variable
+export DEBUG_NAMESPACE="MODULE_FETCH"
+
+debug "Getting module from URL '$url'" 1
 
 executed="false"
 
@@ -452,7 +429,7 @@ if [ -f "$userConfig" ]; then
 
 		# check file existence
 		if [ -f "$moduleFile" ]; then
-			debug "Using local repository '$moduleFile'" "MODULE_FETCH" 1
+			debug "Using local repository '$moduleFile'" 1
 
 			# read file
 			src="$(cat "$moduleFile")"
@@ -460,13 +437,13 @@ if [ -f "$userConfig" ]; then
 			# set executed
 			executed="true"
 		else
-			debug "The module file '$moduleFile' can not be found within the repo '$repo'" "MODULE_FETCH" 3
+			debug "The module file '$moduleFile' can not be found within the repo '$repo'" 3
 		fi
 	else
-		debug "The userConfig '$userConfig' does not seem to contain a value for '$key'" "MODULE_FETCH" 3
+		debug "The userConfig '$userConfig' does not seem to contain a value for '$key'" 3
 	fi
 else
-	debug "No userConfig found at '$userConfig'" "MODULE_FETCH" 3
+	debug "No userConfig found at '$userConfig'" 3
 fi
 
 # obtain the source code
@@ -474,18 +451,18 @@ fi
 if [ "$executed" = "false" ] && ( command -v md5sum >/dev/null 2>&1 || command -v md5 >/dev/null 2>&1 ); then
 	# create/find the cache directory
 	if cachePointer="$(tmpDirByUserKeyword "module-cache" 2>/dev/null)"; then
-		debug "Using cache directory '$cachePointer'" "MODULE_FETCH" 1
+		debug "Using cache directory '$cachePointer'" 1
 		# execute with cache
 		src="$(cache -d "$cachePointer" -- httpsGet "$url")"
 		executed="true"
 	else
-		debug "tmpDirByUserKeyword failed" "MODULE_FETCH" 1
+		debug "tmpDirByUserKeyword failed" 1
 	fi
 fi
 
 # if the command was not executed with the cache, we just skip the cache
 if [ "$executed" = "false" ]; then
-	debug "Getting module without cache" "MODULE_FETCH" 1
+	debug "Getting module without cache" 1
 	src="$(httpsGet "$url")"
 fi
 
@@ -505,7 +482,7 @@ fi
 # write the source code to stdout
 printf '%s' "$src"
 ) }
-# end module https://mdl.sh/module/module-fetch-0.9.14.sh
+# end module https://mdl.sh/module/fetch/module-fetch-0.9.16.sh
 # start module https://mdl.sh/module/scope/module-scope-0.9.3.sh
 moduleScope() { (
 set -eu
@@ -524,15 +501,21 @@ else
 fi
 ) }
 # end module https://mdl.sh/module/scope/module-scope-0.9.3.sh
-# start module https://mdl.sh/module/module-validate-0.9.4.sh
+# start module https://mdl.sh/module/validate/module-validate-0.9.6.sh
 moduleValidate() { (
 set -eu
 src="$1"
 targetHash="$2"
 
-# start module https://mdl.sh/module/module-checksum-0.9.2.sh
+# start module https://mdl.sh/module/checksum/module-checksum-0.9.5.sh
 moduleChecksum() { (
 set -eu
+# check number of arguments
+if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+	printf 'Invalid number of arguments\n' >&2
+	exit 64
+fi
+
 # mandatory:
 # content
 content="$1"
@@ -562,14 +545,14 @@ exit "${2:-1}"
 # end module https://mdl.sh/error/error-1.0.3.sh
 
 if ! command -v "$hashCmd" >/dev/null 2>&1; then
-	error "Checksum command '$hashCmd' is not available. Exiting."
+	error "Checksum command '$hashCmd' is not available. Exiting." 69
 fi
 
 printf '%s-' "$hashCmd"
-printf '%s' "$content" | "$hashCmd" | cut -d ' ' -f1
+printf '%s' "$content" | "$hashCmd" | tr -s '[:blank:]' ' ' | cut -d ' ' -f1
 printf '\n'
 ) }
-# end module https://mdl.sh/module/module-checksum-0.9.2.sh
+# end module https://mdl.sh/module/checksum/module-checksum-0.9.5.sh
 
 hashFunc="$(printf '%s' "$targetHash" | cut -d '-' -f1)"
 srcHash="$(moduleChecksum "$src" "$hashFunc")"
@@ -577,7 +560,7 @@ if [ "$srcHash" != "$targetHash" ]; then
 	return 1
 fi
 ) }
-# end module https://mdl.sh/module/module-validate-0.9.4.sh
+# end module https://mdl.sh/module/validate/module-validate-0.9.6.sh
 
 		# set other parameters
 		name="$1"
@@ -624,4 +607,4 @@ fi
 	fi
 )"
 }
-# end module https://mdl.sh/module/core/module-core-0.9.13.sh
+# end module https://mdl.sh/module/core/module-core-0.9.17.sh
