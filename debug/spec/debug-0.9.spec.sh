@@ -5,7 +5,7 @@ directory="$2"
 
 module "debug" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.sh" "cksum-2671631268"
 
 # ouput to stderr
 result="$(DEBUG_ALL=1 debug "One" 2>&1 1>/dev/null)"

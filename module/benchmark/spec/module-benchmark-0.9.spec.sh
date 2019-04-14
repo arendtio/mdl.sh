@@ -5,7 +5,7 @@ implementation="$1"
 module "benchmark" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
 module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
-module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.sh" "cksum-2671631268"
 
 # shellcheck disable=SC2034  # Variable being used be debug module
 DEBUG_NAMESPACE="BENCHMARK_SPEC"
@@ -76,4 +76,3 @@ target="Calibrating... done
 
 Starting benchmark with 3 rounds:"
 assertEqual "Multiple arguments are getting passed in" "$result" "$target"
-

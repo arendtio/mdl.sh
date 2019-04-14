@@ -4,7 +4,7 @@ implementation="$1"
 directory="$2"
 
 module "httpsGet" "$implementation"
-module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.sh" "cksum-2671631268"
 
 DEBUG_NAMESPACE="HTTPS_GET_SPEC"
 

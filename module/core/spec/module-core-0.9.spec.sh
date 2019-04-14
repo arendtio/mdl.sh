@@ -3,7 +3,7 @@
 implementation="$1"
 
 module "moduleModule" "$implementation"
-module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.sh" "cksum-2671631268"
 
 # shellcheck disable=SC2034  # The debug module uses this variable
 DEBUG_NAMESPACE="MODULE_SPEC"
@@ -98,4 +98,3 @@ runModuleTests() { (
 ) }
 
 runModuleTests "moduleModule"
-

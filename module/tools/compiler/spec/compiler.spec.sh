@@ -6,8 +6,8 @@ directory="$2"
 module "compiler" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
 module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
-module "moduleFetch" "https://mdl.sh/module/fetch/module-fetch-0.9.15.sh" "cksum-626475234"
-module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+module "moduleFetch" "https://mdl.sh/module/fetch/module-fetch-0.9.16.sh" "cksum-3154089636"
+module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.sh" "cksum-2671631268"
 
 # shellcheck disable=SC2034  # The debug module uses this variable
 DEBUG_NAMESPACE="COMPILER_SPEC"
