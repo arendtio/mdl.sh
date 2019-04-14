@@ -8,13 +8,22 @@ set -eu
 # and placing them in a central point to avoid redownloading it for every test
 tempDir="$(mktemp -d)"
 moduleFile="$tempDir/module-latest.sh"
-if ! command -v module; then
-	url="https://mdl.sh/latest"
-	printf '%s' "$(curl -fsL "$url" || wget "$url" -O -)" >"$moduleFile" 2>/dev/null
 
-	# load module.sh for this instance
-	. "$moduleFile"
+if [ "$(command -v module 2>/dev/null | cut -c1)" = "/" ]; then
+	# use the local version if possible
+	printf '%s\n' "$(module init)" > "$moduleFile"
+else
+	# otherwise use the online version
+	h=mdl.sh;
+	p=/latest;
+	url="https://$h$p"
+	printf '%s' "$(	curl -fsL "$url" || wget -q "$url" -O - || ( printf 'GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n' "$p" "$h" | openssl s_client -quiet -connect "$h:443" 2>/dev/null | sed '1,/^\r$/d') )" >"$moduleFile" 2>/dev/null
+
 fi
+
+# load module.sh for this instance
+# this file is also being used in the wrapper
+. "$moduleFile"
 
 # dependencies
 module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
@@ -97,10 +106,10 @@ reportTest() {
 
 # shellcheck disable=SC2016
 wrapper="$(printf '%s\n' \
-	'set -eu' \
-	'command -v module || eval "$(cat "'"$moduleFile"'")"' \
-	'module "specTest" "https://mdl.sh/spec-test/spec-test-0.9.0.sh"' \
-	'specTest "$@"')"
+'set -eu
+[ "$(command -v module | cut -c1)" != "m" ] && eval "$(cat "'"$moduleFile"'")"
+module "specTestRun" "https://mdl.sh/spec-test/run/spec-test-run-0.9.4.sh" "cksum-4013713265"
+specTestRun "$@"')"
 
 # Executing main script
 printf 'Searching for specs... '
