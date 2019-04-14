@@ -5,7 +5,7 @@ directory="$2"
 
 module "compiler" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
 module "moduleFetch" "https://mdl.sh/module/fetch/module-fetch-0.9.15.sh" "cksum-626475234"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
 
@@ -45,16 +45,16 @@ codeFile="$directory/compiler.implementation.sh"
 staticCompiler="$directory/compiler.static.sh"
 secondCompiler="$directory/compiler2.static.sh"
 
-debug "Fetch implementation and save it to a file" COMPILER_SPEC 1
+debug "Fetch implementation and save it to a file" 1
 moduleFetch "$implementation" >"$codeFile"
 
-debug "Use the implmentation to compile the fetched file" COMPILER_SPEC 1
+debug "Use the implmentation to compile the fetched file" 1
 compiler "$codeFile" "$staticCompiler" >/dev/null 2>&1
 
-debug "Use the resulting static version of the compiler to compile the the fetched code again" COMPILER_SPEC 1
+debug "Use the resulting static version of the compiler to compile the the fetched code again" 1
 "$staticCompiler" "$codeFile" "$secondCompiler" >/dev/null 2>&1
 
-debug "Ckeck if the result of the first compilation is equal to the second one" COMPILER_SPEC 1
+debug "Ckeck if the result of the first compilation is equal to the second one" 1
 result="$(cksum <"$secondCompiler")"
 target="$(cksum <"$staticCompiler")"
 assertEqual "Compiled compiler compiles" "$result" "$target"

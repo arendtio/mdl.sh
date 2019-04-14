@@ -4,7 +4,7 @@ implementation="$1"
 
 module "benchmark" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
 
 # shellcheck disable=SC2034  # Variable being used be debug module
@@ -36,7 +36,7 @@ assertEqual "Fail when one module does not exist" "$result" "$target"
 #
 # run a benchmark and save the output
 output="$(benchmark "$moduleA" "$moduleB" $moduleArgs)"
-debug "Benchmark output: $output" "$DEBUG_NAMESPACE" 1
+debug "Benchmark output: $output" 1
 
 # check for the header
 result="$(printf '%s' "$output" | head -n 3)"
@@ -68,7 +68,7 @@ assertEqual "Interpretation help" "$result" "$target"
 # we use the multiply-sleep module here which should result in a sleep
 # for 2 seconds
 output="$(benchmark "$moduleM" "$moduleM" 2 1)"
-debug "Benchmark output: $output" "$DEBUG_NAMESPACE" 1
+debug "Benchmark output: $output" 1
 
 # check the header for the calibration result
 result="$(printf '%s' "$output" | head -n 3)"

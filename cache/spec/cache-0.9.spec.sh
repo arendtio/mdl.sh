@@ -8,8 +8,11 @@ baseDirectory="$2"
 
 module "cache" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
+
+# shellcheck disable=SC2034  # The debug module uses this variable
+DEBUG_NAMESPACE="CACHE_SPEC"
 
 keyword="test-cache"
 cacheDirectory="$baseDirectory/cacheTest"
@@ -122,7 +125,7 @@ result2="$(cache -t 2 -s "$cmd")"
 assertEqual "Time limit cached" "$result2" "$result1"
 
 # wait until the cache expires
-debug "Waiting 3 seconds until the cache is expired..." CACHE_SPEC 1
+debug "Waiting 3 seconds until the cache is expired..." 1
 sleep 3
 
 # execute the command a third time after the cache expired

@@ -1,13 +1,13 @@
 #!/bin/sh
 
 implementation="$1"
-directory="$2"
 
 module "tmpDirByUserKeyword" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
+module "debug" "https://mdl.sh/debug/debug-1.0.0.sh" "cksum-1059380841"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
 
+# shellcheck disable=SC2034  # The debug module uses this variable
 DEBUG_NAMESPACE="TMPDIR_SPEC"
 
 # no argument
@@ -45,9 +45,9 @@ if [ "$result1" = "$result3" ]; then
 fi
 
 # cleanup
-debug "$(rm -vr "$result1")" TMPDIR_SPEC 1
-debug "$(rm -vr "$result3")" TMPDIR_SPEC 1
+debug "$(rm -vr "$result1")" 1
+debug "$(rm -vr "$result3")" 1
 corePath1="$(printf '%s' "$result1" | sed 's/\.[^\./]*$//')"
-debug "$(rm -v "$corePath1-pointer."*)" TMPDIR_SPEC 1
+debug "$(rm -v "$corePath1-pointer."*)" 1
 corePath3="$(printf '%s' "$result3" | sed 's/\.[^\./]*$//')"
-debug "$(rm -v "$corePath3-pointer."*)" TMPDIR_SPEC 1
+debug "$(rm -v "$corePath3-pointer."*)" 1

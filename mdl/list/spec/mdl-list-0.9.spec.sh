@@ -1,14 +1,10 @@
 #!/bin/sh
 
 implementation="$1"
-directory="$2"
 
 module "mdlList" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
-
-DEBUG_NAMESPACE="MDL_LIST_SPEC"
 
 # no arguments
 if mdlList >/dev/null 2>&1; then
@@ -26,7 +22,7 @@ if mdlList "invalid" >/dev/null 2>&1; then
 fi
 
 # action all
-result="$(mdlList "all" / | grep '^/\(CNAME\|hello-world\)$' | wc -l | sed 's/^[[:space:]]*//g')"
+result="$(mdlList "all" / | grep -c '^/\(CNAME\|hello-world\)$' | sed 's/^[[:space:]]*//g')"
 target="2"
 assertEqual "Action all" "$result" "$target"
 

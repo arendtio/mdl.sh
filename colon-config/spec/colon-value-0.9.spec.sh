@@ -7,7 +7,6 @@ file="$directory/test.conf"
 
 module "colonValue" "$implementation"
 module "error" "https://mdl.sh/error/error-1.0.3.sh" "cksum-2734170982"
-module "debug" "https://mdl.sh/debug/debug-0.9.2.sh" "cksum-2374238394"
 module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.5.sh" "cksum-566303087"
 
 # file does not exist
@@ -16,7 +15,7 @@ if colonValue "Zero" "$file" >/dev/null; then
 fi
 
 # create a file
-printf 'One: A\nTwo:B\nFour:\nFive: E \nSix: F:F\n' >$file
+printf 'One: A\nTwo:B\nFour:\nFive: E \nSix: F:F\n' >"$file"
 
 # colon with space
 result="$(colonValue "One" "$file")"
