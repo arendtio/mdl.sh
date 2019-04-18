@@ -27,12 +27,22 @@ result="$(identifier "https://mdl.sh/hello-world/hello-world-1.0.0.sh")"
 target="https://mdl.sh/hello-world/hello-world-1.0.0.sh"
 assertEqual "Basic URL" "$result" "$target"
 
-# path to existing file test
-file="$directory/my-test-module-1.0.0.sh"
-touch "$file"
-result="$(identifier "$file")"
-target="$file"
-assertEqual "Path to existing file" "$result" "$target"
+# Path to existing file
+#
+# NOTE: This test was changed. An ealier version required to output the
+# unchanged path to existing files. This however caused some inconsistent
+# behaviour as module-fetch does not implement the same logic and explicitly
+# should not support fetching local files unless a local repository is
+# configured.
+(
+	cd "$directory" || exit 1
+	file="category/my-test-module-1.0.0.sh"
+	mkdir "$(dirname "$file")"
+	touch "$file"
+	target="https://mdl.sh/$file"
+	result="$(identifier "$file")"
+	assertEqual "Path to existing file" "$result" "$target"
+)
 
 # half url test
 result="$(identifier "my-short/url-module-1.0.0.sh")"
