@@ -58,3 +58,8 @@ assertEqual "Long half URL" "$result" "$target"
 result="$(identifier "hello-world-1.0.0.sh")"
 target="https://mdl.sh/hello-world/hello-world-1.0.0.sh"
 assertEqual "Pure package name" "$result" "$target"
+
+# package name starting with https
+result="$(identifier "https-get/spec/https-get-1.0.spec.sh")"
+target="https://mdl.sh/https-get/spec/https-get-1.0.spec.sh"
+assertEqual "Pure package name" "$result" "$target"
