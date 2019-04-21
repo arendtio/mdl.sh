@@ -43,6 +43,11 @@ target="65"
 cmd="moduleFetch 'hello-world/hello-world-1.0.0.sh'"
 assertReturnCode "Invalid URL short-identifier" "$target" "$cmd"
 
+# Fetch a non-script file
+target="65"
+cmd="moduleFetch 'https://mdl.sh/module/fetch/spec/assets/abc.txt'"
+assertReturnCode "Non-script file" "$target" "$cmd"
+
 #
 # Normal Tests
 #
