@@ -10,7 +10,7 @@ module "assertEqual" "https://mdl.sh/spec-test/assert/equal/assert-equal-0.9.6.s
 # This can be used to debug print all asserts with
 # DEBUG_COLON_CONFIG_SPEC=2 ./run-all.sh
 # mind the DEBUG_ before the namespace
-DEBUG_NAMESPACE="COLON_CONFIG_SPEC"
+export DEBUG_NAMESPACE="COLON_CONFIG_SPEC"
 
 # one argument (invalid)
 if colonConfig "whatever" >/dev/null 2>&1; then
@@ -33,10 +33,10 @@ target="default"
 assertEqual "File does not exist" "$result" "$target"
 
 # create config files
-printf 'One: A\n' >$directory/first.conf
-printf 'One: AA\nTwo: BB\n' >$directory/second.conf
-printf 'Two: BBB\nThree: CCC\n' >$directory/third.conf
-printf 'Four: DDDD\n' >$directory/fourth.conf
+printf 'One: A\n' >"$directory/first.conf"
+printf 'One: AA\nTwo: BB\n' >"$directory/second.conf"
+printf 'Two: BBB\nThree: CCC\n' >"$directory/third.conf"
+printf 'Four: DDDD\n' >"$directory/fourth.conf"
 
 # one config (value does not exist)
 result="$(colonConfig "Zero" "$directory/first.conf" "default")"
@@ -77,3 +77,10 @@ assertEqual "Four configs (key in last)" "$result" "$target"
 result="$(colonConfig "Zero" "$directory/first.conf" "$directory/second.conf" "$directory/third.conf" "$directory/fourth.conf" "default")"
 target="default"
 assertEqual "Four configs (key does not exist)" "$result" "$target"
+
+# Value from environment variable
+export CONFIG_ONE="Environment"
+result="$(colonConfig "One" "$directory/first.conf" "default")"
+target="Environment"
+assertEqual "Value from environment variable" "$result" "$target"
+
