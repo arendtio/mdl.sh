@@ -52,7 +52,7 @@ assertReturnCode "Non-script file" "$target" "$cmd"
 # Normal Tests
 #
 # normal test
-# Note: we trim whitespaces; preserving them is not completely simple in a POSIX compliant way
-target="1466632224 29"
+# NOTE: we do not trim whitespace anymore
+target="1346054948 31"
 result="$(moduleFetch "https://mdl.sh/hello-world/hello-world-1.0.0.sh" | cksum)"
 assertEqual "Normal hello-world fetch" "$result" "$target"
