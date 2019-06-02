@@ -68,7 +68,8 @@ if [ "$executed" = "false" ] && ( command -v md5sum >/dev/null 2>&1 || command -
 		# execute with cache
 		# tunnel the return value of httpsGet through the pipe:
 		# https://unix.stackexchange.com/questions/14270/get-exit-status-of-process-thats-piped-to-another/70675#70675
-		src="$( ( ( ( cache -d "$cachePointer" -s "httpsGet '$url'"; printf '%s' "$?" >&3 ) | whitespaceProtection add >&4) 3>&1) | ( read -r rc ; exit "$rc" ) 4>&1; )" || exit $?
+		# shellcheck disable=SC2086
+		src="$( ( ( ( ( cache -d "$cachePointer" -s "httpsGet '$url'"; printf '%s\n' "$?" >&3 ) | whitespaceProtection add >&4 ) 3>&1 ) | ( read -r rc ; exit $rc ) ) 4>&1; )" || exit $?
 		executed="true"
 	else
 		debug "tmpDirByUserKeyword failed" 1
