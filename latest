@@ -681,7 +681,9 @@ fi
 		fi
 
 		# obtain module source from https or a local repository
-		src="$(moduleFetch "$location")"
+		src="$(printf 'AAA'; moduleFetch "$location"; printf 'ZZZ')"
+		src="${src#AAA}" # Protecting the whitespace
+		src="${src%ZZZ}"
 		rc="$?"
 		if [ "$rc" != "0" ]; then
 			error "The module content '$location' could not be loaded. Exiting." 69
