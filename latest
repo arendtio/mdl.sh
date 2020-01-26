@@ -4,7 +4,7 @@
 # is only being used in the static version
 
 # define a function called 'module' which does exactly what module-core does
-# start module https://mdl.sh/development/module/core/module-core-0.9.19.sh
+# start module https://mdl.sh/development/module/core/module-core-0.9.21.sh
 module() {
 # guarantees: intentional-side-effects
 
@@ -598,7 +598,7 @@ else
 fi
 ) }
 # end module https://mdl.sh/development/module/scope/module-scope-0.9.4.sh
-# start module https://mdl.sh/development/module/validate/module-validate-0.9.8.sh
+# start module https://mdl.sh/development/module/validate/module-validate-0.9.9.sh
 moduleValidate() { (
 set -eu
 # check number of arguments
@@ -659,14 +659,27 @@ cat - | "$hashCmd" | tr -s '[:blank:]' ' ' | cut -d ' ' -f1
 printf '\n'
 ) }
 # end module https://mdl.sh/development/module/checksum/module-checksum-1.0.0.sh
+# start module https://mdl.sh/development/debug/debug-1.0.0.sh
+debug() {
+# guarantees: intentional-side-effects
+# To understand this code please take a look at the README.md
+
+if [ "$#" -gt 0 ] &&  [ "$(eval "printf '%s\\n' \"\${DEBUG_${3:-${DEBUG_NAMESPACE:-ALL}}:-$(printf '%s' "${DEBUG_ALL:-0}")}\"")" -ge "${2:-1}" ]; then
+	printf '%s: %s\n' "${3:-${DEBUG_NAMESPACE:-ALL}}" "$1" >&2
+fi
+}
+# end module https://mdl.sh/development/debug/debug-1.0.0.sh
+
+export DEBUG_NAMESPACE="MODULE_VALIDATE"
 
 hashFunc="$(printf '%s' "$targetHash" | cut -d '-' -f1)"
 srcHash="$(printf '%s' "$src" | moduleChecksum "$hashFunc")" || exit 65
 if [ "$srcHash" != "$targetHash" ]; then
+	debug "Hash mismatch: is '$srcHash', but should be '$targetHash'." 1
 	exit 1
 fi
 ) }
-# end module https://mdl.sh/development/module/validate/module-validate-0.9.8.sh
+# end module https://mdl.sh/development/module/validate/module-validate-0.9.9.sh
 
 		# set other parameters
 		name="$1"
@@ -681,10 +694,10 @@ fi
 		fi
 
 		# obtain module source from https or a local repository
-		src="$(printf 'AAA'; moduleFetch "$location"; printf 'ZZZ')"
+		src="$(printf 'AAA'; moduleFetch "$location"; rcs="$?"; printf 'ZZZ'; exit "$rcs")"
+		rc="$?"
 		src="${src#AAA}" # Protecting the whitespace
 		src="${src%ZZZ}"
-		rc="$?"
 		if [ "$rc" != "0" ]; then
 			error "The module content '$location' could not be loaded. Exiting." 69
 		fi
@@ -715,4 +728,4 @@ fi
 	fi
 )"
 }
-# end module https://mdl.sh/development/module/core/module-core-0.9.19.sh
+# end module https://mdl.sh/development/module/core/module-core-0.9.21.sh
