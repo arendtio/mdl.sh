@@ -35,7 +35,7 @@ assertReturnCode "Non-script file" "$target" "$cmd"
 
 # non-existent hash function
 target="69"
-cmd="hash 'https://mdl.sh/hello-world/hello-world-1.0.1.sh' 'unavailableHashFunction'"
+cmd="hash 'https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh' 'unavailableHashFunction'"
 assertReturnCode "Unavailable hash function" "$target" "$cmd"
 
 #
@@ -43,26 +43,27 @@ assertReturnCode "Unavailable hash function" "$target" "$cmd"
 #
 # Output length
 target="13"
-result="$(hash "https://mdl.sh/hello-world/hello-world-1.0.1.sh" | wc -l)"
+result="$(hash "https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh" | wc -l)"
 assertEqual "Output length" "$result" "$target"
 
 # last line
-target='module "helloWorld" "https://mdl.sh/hello-world/hello-world-1.0.1.sh" "cksum-3769348439"'
-result="$(hash "https://mdl.sh/hello-world/hello-world-1.0.1.sh" | tail -n 1)"
+target='module "helloWorld" "https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh" "cksum-3769348439"'
+result="$(hash "https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh" | tail -n 1)"
 assertEqual "Last line" "$result" "$target"
 
+# NOTE: currently, there is no package left that is available via the short identifier :-/
 # short identifier
-target='module "helloWorld" "https://mdl.sh/hello-world/hello-world-1.0.1.sh" "cksum-3769348439"'
-result="$(hash "hello-world-1.0.1.sh" | tail -n 1)"
-assertEqual "Short identifier" "$result" "$target"
+#target='module "helloWorld" "https://mdl.sh/hello-world/hello-world-1.0.1.sh" "cksum-3769348439"'
+#result="$(hash "hello-world-1.0.1.sh" | tail -n 1)"
+#assertEqual "Short identifier" "$result" "$target"
 
 # custom hash function
 customHash(){
 	# wc -l does not count lines without a newline character at the end and module-fetch trims whitespaces
 	printf 'A%sZ' "$(cat - | wc -l)"
 }
-target='module "helloWorld" "https://mdl.sh/hello-world/hello-world-1.0.1.sh" "customHash-A4Z"'
-result="$(hash "hello-world-1.0.1.sh" "customHash" | tail -n 1)"
+target='module "helloWorld" "https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh" "customHash-A4Z"'
+result="$(hash "misc/hello-world/hello-world-1.0.1.sh" "customHash" | tail -n 1)"
 assertEqual "Custom hash function" "$result" "$target"
 
 
