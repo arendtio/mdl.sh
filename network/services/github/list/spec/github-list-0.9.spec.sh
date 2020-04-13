@@ -22,13 +22,13 @@ if githubList "invalid" >/dev/null 2>&1; then
 fi
 
 # action all
-result="$(githubList "all" "arendtio" "mdl.sh" / | grep -c '^/\(CNAME\|hello-world\)$' | sed 's/^[[:space:]]*//g')"
+result="$(githubList "all" "arendtio" "mdl.sh" / | grep -c '^/\(CNAME\|misc\)$' | sed 's/^[[:space:]]*//g')"
 target="2"
 assertEqual "Action all" "$result" "$target"
 
 # action dirs
-result="$(githubList "dirs" "arendtio" "mdl.sh" / | grep '^/hello-world$')"
-target="/hello-world"
+result="$(githubList "dirs" "arendtio" "mdl.sh" / | grep '^/misc$')"
+target="/misc"
 assertEqual "Action dirs" "$result" "$target"
 
 # action files
@@ -37,16 +37,16 @@ target="/CNAME"
 assertEqual "Action files" "$result" "$target"
 
 # with custom path
-result="$(githubList "files" "arendtio" "mdl.sh" /hello-world | grep '^/hello-world/hello-world-1.0.0.sh$')"
-target="/hello-world/hello-world-1.0.0.sh"
+result="$(githubList "files" "arendtio" "mdl.sh" /misc/hello-world | grep '^/misc/hello-world/hello-world-1.0.1.sh$')"
+target="/misc/hello-world/hello-world-1.0.1.sh"
 assertEqual "Custom path" "$result" "$target"
 
 # with additional slash at the end of the path
-result="$(githubList "files" "arendtio" "mdl.sh" /hello-world/ | grep '^/hello-world/hello-world-1.0.0.sh$')"
-target="/hello-world/hello-world-1.0.0.sh"
+result="$(githubList "files" "arendtio" "mdl.sh" /misc/hello-world/ | grep '^/misc/hello-world/hello-world-1.0.1.sh$')"
+target="/misc/hello-world/hello-world-1.0.1.sh"
 assertEqual "Custom path with slash" "$result" "$target"
 
 # fail if path doesn't start with a slash
-if githubList "files" "arendtio" "mdl.sh" "hello-world" >/dev/null 2>&1; then
+if githubList "files" "arendtio" "mdl.sh" "misc" >/dev/null 2>&1; then
 	error "TEST: githubList does not return a non-zero value if the path argument does not start with a slash"
 fi
