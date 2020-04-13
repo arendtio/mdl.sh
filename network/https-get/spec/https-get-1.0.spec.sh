@@ -31,8 +31,8 @@ assertReturnCode "Non-HTTPS URL" "$target" "$cmd"
 # Normal Tests
 #
 ## normal test
-target="1346054948 31"
-result="$(httpsGet "https://mdl.sh/hello-world/hello-world-1.0.0.sh" | cksum)"
+target="3769348439 35"
+result="$(httpsGet "https://mdl.sh/misc/hello-world/hello-world-1.0.1.sh" | cksum)"
 assertEqual "Basic hello-world fetch" "$result" "$target"
 
 # Unavailable URL
