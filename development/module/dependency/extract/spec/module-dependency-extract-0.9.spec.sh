@@ -24,7 +24,7 @@ assertReturnCode "Too many arguments" "$target" "$cmd"
 #
 # Normal Tests
 #
-moduleFetch "https://mdl.sh/module/dependency/extract/spec/assets/dependencies-1.0.0.sh" >"$directory/dependencies-1.0.0.sh"
+moduleFetch "https://mdl.sh/development/module/dependency/extract/spec/assets/dependencies-1.0.0.sh" >"$directory/dependencies-1.0.0.sh"
 
 # normal test
 target="$(printf 'https://mdl.sh/normal-1.0.0.sh
