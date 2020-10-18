@@ -52,3 +52,20 @@ target="$(printf 'HelloWorld!\n' | cksum)"
 result="$(printf 'AAAHelloWorld!\nZZZ' | whitespaceProtection remove | cksum)"
 assertEqual "String with newline" "$result" "$target"
 
+# begin & end tests
+target="AAA A "
+result="$(whitespaceProtection begin; printf ' A ')"
+assertEqual "Add whitespace protection to the start" "$result" "$target"
+
+target=" A ZZZ"
+result="$(printf ' A '; whitespaceProtection end)"
+assertEqual "Add whitespace protection to the end" "$result" "$target"
+
+target="AAA A ZZZ"
+result="$(whitespaceProtection begin; printf ' A '; whitespaceProtection end)"
+assertEqual "Add whitespace protection via begin and end" "$result" "$target"
+
+target="$(printf ' A ' | cksum)"
+result="$(printf '%s' "$(whitespaceProtection begin; printf ' A '; whitespaceProtection end)" | whitespaceProtection remove | cksum)"
+assertEqual "Add whitespace protection via begin and end and remove it again via remove" "$result" "$target"
+
