@@ -5,8 +5,8 @@ directory="$2"
 
 module "dependencyUpdate" "$implementation"
 module "debug" "https://mdl.sh/development/debug/debug-1.0.0.sh" "cksum-1996092554"
-module "moduleFetch" "https://mdl.sh/development/module/fetch/module-fetch-0.9.21.sh" "cksum-2848792046"
-module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-0.9.26.sh" "cksum-1678143937"
+module "moduleFetch" "https://mdl.sh/development/module/fetch/module-fetch-0.9.22.sh" "cksum-1242620769"
+module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-0.9.28.sh" "cksum-2962865775"
 # we require the static ASSERT versions, because they are run while the local repository is set to the test repo
 # that way it works completely offline
 module "assertEqual" "https://mdl.sh/development/spec-test/assert/equal/assert-equal-static-0.9.7.sh" "cksum-1063031039"
