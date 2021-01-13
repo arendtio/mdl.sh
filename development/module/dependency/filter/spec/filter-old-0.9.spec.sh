@@ -8,7 +8,7 @@ module "debug" "https://mdl.sh/development/debug/debug-1.0.0.sh" "cksum-19960925
 module "assertEqual" "https://mdl.sh/development/spec-test/assert/equal/assert-equal-0.9.7.sh" "cksum-3783051722"
 module "assertReturnCode" "https://mdl.sh/development/spec-test/assert/return-code/assert-return-code-0.9.4.sh" "cksum-1582104248"
 module "moduleFetch" "https://mdl.sh/development/module/fetch/module-fetch-0.9.22.sh" "cksum-1242620769"
-module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-0.9.28.sh" "cksum-2962865775"
+module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-1.0.0.sh" "cksum-3880525416"
 
 # The debug module uses this variable
 export DEBUG_NAMESPACE="MODULE_DEPENDENCY_FILTER_SPEC"
@@ -47,7 +47,7 @@ moduleFetch "$baseUrl/module-b-1.0.0.sh" > "$baseDir/module-b-1.0.0.sh"
 # build a static version
 debug "Starting compiler to create a static version of filter-old" 1
 staticImplementation="$baseDir/filter-old-static.sh"
-moduleCompiler "$(moduleFetch "$implementation")" "$(dirname "$baseDir")" > "$staticImplementation" 2>/dev/null
+moduleCompiler "$(moduleFetch "$implementation")" > "$staticImplementation" 2>/dev/null
 chmod +x "$staticImplementation"
 debug "Finished compiling filter-old" 1
 

@@ -22,7 +22,7 @@ fi
 
 # first argument does not exist
 if compiler "$directory/one.txt" "$directory/two.txt" >/dev/null 2>&1; then
-	error "TEST: compiler does not return a non-zero value if too few arguments are supplied"
+	error "TEST: compiler does not return a non-zero value if the first argument does not exist"
 fi
 
 # result exists
@@ -32,11 +32,12 @@ if compiler "$directory/one.txt" "$directory/two.txt" >/dev/null 2>&1; then
 	error "TEST: compiler does not return a non-zero value if the result file exists"
 fi
 
-# compile empty file
+# compile a basic file
+printf '#!/bin/sh' >"$directory/one.txt"
 rm "$directory/two.txt"
 compiler "$directory/one.txt" "$directory/two.txt" >/dev/null
 result="$(cat "$directory/two.txt")"
-target=""
+target="$(cat "$directory/one.txt")"
 assertEqual "Compile empty file" "$result" "$target"
 
 

@@ -6,7 +6,7 @@ directory="$2"
 module "dependencyUpdate" "$implementation"
 module "debug" "https://mdl.sh/development/debug/debug-1.0.0.sh" "cksum-1996092554"
 module "moduleFetch" "https://mdl.sh/development/module/fetch/module-fetch-0.9.22.sh" "cksum-1242620769"
-module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-0.9.28.sh" "cksum-2962865775"
+module "moduleCompiler" "https://mdl.sh/development/module/compiler/module-compiler-1.0.0.sh" "cksum-3880525416"
 # we require the static ASSERT versions, because they are run while the local repository is set to the test repo
 # that way it works completely offline
 module "assertEqual" "https://mdl.sh/development/spec-test/assert/equal/assert-equal-static-0.9.7.sh" "cksum-1063031039"
@@ -26,7 +26,7 @@ moduleFetch "$baseUrl/module-b-1.0.0.sh" > "$baseDir/module-b-1.0.0.sh"
 # create a static version of the $implementation to let it work offline too
 debug "Starting compiler to create a static version of dependency-update" 1
 staticImplementation="$directory/dependency-update-static.sh"
-moduleCompiler "$(moduleFetch "$implementation")" "$(dirname "$baseDir")" > "$staticImplementation" 2>/dev/null
+moduleCompiler "$(moduleFetch "$implementation")" > "$staticImplementation" 2>/dev/null
 chmod +x "$staticImplementation"
 debug "Finished compiling dependency-update" 1
 
