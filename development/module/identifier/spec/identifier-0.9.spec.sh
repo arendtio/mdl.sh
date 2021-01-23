@@ -6,7 +6,7 @@ directory="$2"
 module "identifier" "$implementation"
 module "error" "https://mdl.sh/development/error/error-1.0.4.sh" "cksum-1614978459"
 module "assertEqual" "https://mdl.sh/development/spec-test/assert/equal/assert-equal-0.9.7.sh" "cksum-3783051722"
-module "assertReturnCode" "https://mdl.sh/development/spec-test/assert/return-code/assert-return-code-0.9.4.sh" "cksum-1582104248"
+module "assertReturnCode" "https://mdl.sh/development/spec-test/assert/return-code/assert-return-code-0.9.5.sh" "cksum-3256561424"
 
 # shellcheck disable=SC2034  # The debug module uses this variable
 DEBUG_NAMESPACE="IDENTIFIER_SPEC"

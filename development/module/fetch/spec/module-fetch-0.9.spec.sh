@@ -5,7 +5,7 @@ implementation="$1"
 module "moduleFetch" "$implementation"
 module "debug" "https://mdl.sh/development/debug/debug-1.0.0.sh" "cksum-1996092554"
 module "assertEqual" "https://mdl.sh/development/spec-test/assert/equal/assert-equal-0.9.7.sh" "cksum-3783051722"
-module "assertReturnCode" "https://mdl.sh/development/spec-test/assert/return-code/assert-return-code-0.9.4.sh" "cksum-1582104248"
+module "assertReturnCode" "https://mdl.sh/development/spec-test/assert/return-code/assert-return-code-0.9.5.sh" "cksum-3256561424"
 
 # The debug module uses this variable
 export DEBUG_NAMESPACE="MODULE_FETCH_SPEC"
