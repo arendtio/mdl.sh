@@ -127,3 +127,8 @@ assertEqual "latestSameMajor hello-world" "$result" "$target"
 result="$(findVersion "latestSameMajor" "/development/error/error-1.0.0.sh")"
 target="/development/error/error-1.0.4.sh"
 assertEqual "latestSameMajor error-1.0.0" "$result" "$target"
+
+# a module with only one version yet
+result="$(findVersion "latestSameMajor" "/network/services/mdl/find-version/spec/assets/single/single-0.0.0.sh")"
+target="/network/services/mdl/find-version/spec/assets/single/single-0.0.0.sh"
+assertEqual "latestSameMajor a module with just a single version" "$result" "$target"
