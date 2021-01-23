@@ -68,3 +68,12 @@ result="0"
 #assertReturnCode "example descrition" "1" "retOne" >/dev/null 2>&1 || result="$?" && true
 assertReturnCode "example descrition" "1" "retOne" || result="$?" && true
 assertEqual "Custom function" "$result" "$target"
+
+# contermination test
+# use a function that is imported by this module but not by the executed code;
+# 'debug' in this case
+target="0"
+result="0"
+assertReturnCode "example description" "127" "debug 'nothing'" >/dev/null 2>&1 || result="$?" && true
+assertEqual "Contermination tests" "$result" "$target"
+
